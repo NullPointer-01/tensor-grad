@@ -153,18 +153,21 @@ class Tensor:
     def backward(self):
         topo = []
         visited = set()
+        stack = [self]
 
-        def dfs(tensor):
-            if tensor in visited:
-                return
+        while stack:
+            tensor = stack[-1]
 
-            visited.add(tensor)
-            for parent in tensor.parents:
-                dfs(parent)
+            # First visit
+            if tensor not in visited:
+                visited.add(tensor)
+                stack.extend(p for p in tensor.parents if p not in visited)
 
-            topo.append(tensor)
+            # Second visit
+            else:
+                stack.pop()
+                topo.append(tensor)
 
-        dfs(self)
         self.grad = np.ones_like(self.data)
 
         for tensor in reversed(topo):
