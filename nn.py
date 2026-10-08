@@ -5,8 +5,8 @@ from tensor import Tensor
 class Linear:
     def __init__(self, nin, nout, activation=True):
         # He initialization
-        self.W = Tensor(np.random.randn(nin, nout) * np.sqrt(2 / nin))
-        self.b = Tensor(np.zeros(nout))
+        self.W = Tensor(np.random.randn(nin, nout) * np.sqrt(2 / nin), requires_grad=True)
+        self.b = Tensor(np.zeros(nout), requires_grad=True)
         self.activation = activation
 
     def __call__(self, X):
